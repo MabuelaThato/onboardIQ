@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: onboardiq-postgres
+
+    environment:
+      POSTGRES_DB: onboardiq
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  tomcat:
+    image: tomcat:10
+
+    container_name: onboardiq-tomcat
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./target/onboardiq.war:/usr/local/tomcat/webapps/onboardiq.war
+
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
